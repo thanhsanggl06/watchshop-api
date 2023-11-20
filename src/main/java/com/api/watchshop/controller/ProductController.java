@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/products")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins ={ "http://localhost:4200", "http://localhost:4201"})
 @AllArgsConstructor
 public class ProductController {
     private ProductService productService;
@@ -52,7 +52,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponse> updateProductById(@PathVariable long id, @RequestBody ProductRequest productRequest){
+    public ResponseEntity<ProductResponse> updateProductById(@PathVariable long id,@RequestBody ProductRequest productRequest){
         return ResponseEntity.ok(productService.update(id, productRequest));
     }
 

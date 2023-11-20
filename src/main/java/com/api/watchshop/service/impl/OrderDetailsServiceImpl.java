@@ -9,8 +9,11 @@ import com.api.watchshop.repository.OrderDetailsRepository;
 import com.api.watchshop.repository.ProductRepository;
 import com.api.watchshop.service.OrderDetailsService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 @Service
@@ -37,9 +40,12 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
         return ls;
     }
 
-
-
-
+    @Override
+    public List<Object[]> getBestSellingProductsBetweenDates(LocalDateTime startDate, LocalDateTime endDate) {
+        Pageable pageable = PageRequest.of(0,3);
+        List<Object[]> rs = orderDetailsRepository.getBestSellingProductsBetweenDates(startDate, endDate,pageable);
+        return rs;
+    }
 
 
 }

@@ -1,6 +1,7 @@
 package com.api.watchshop.service.impl;
 
 import com.api.watchshop.dto.OrderRequest;
+import com.api.watchshop.dto.OrderResponse;
 import com.api.watchshop.dto.TrackingOrderResponse;
 import com.api.watchshop.entity.Customer;
 import com.api.watchshop.entity.Order;
@@ -12,6 +13,7 @@ import com.api.watchshop.service.OrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,5 +45,37 @@ public class OrderServiceImpl implements OrderService {
         }
         List<TrackingOrderResponse> ls = orderRepository.findByCustomer(c).stream().map(OrderAutoMapper.MAPPER::mapToTrackingOrderResponse).collect(Collectors.toList());
         return ls;
+    }
+
+    @Override
+    public List<TrackingOrderResponse> getOrdersByOrderStatus(String orderStatus) {
+        List<TrackingOrderResponse> ls = orderRepository.findByOrderStatus(orderStatus).stream().map(OrderAutoMapper.MAPPER::mapToTrackingOrderResponse).collect(Collectors.toList());
+        return ls;
+    }
+
+    @Override
+    public List<TrackingOrderResponse> getOrdersByOrderDateBetween(LocalDateTime starDate, LocalDateTime endDate) {
+        List<TrackingOrderResponse> ls = orderRepository.findByOrderDateBetween(starDate, endDate).stream().map(OrderAutoMapper.MAPPER::mapToTrackingOrderResponse).collect(Collectors.toList());
+        return ls;
+    }
+
+    @Override
+    public List<Object[]> getDailyRevenueBetweenDates(LocalDateTime startDate, LocalDateTime endDate) {
+
+        return orderRepository.getDailyRevenueBetweenDates(startDate, endDate);
+    }
+
+    @Override
+    public List<Object[]> getRevenueByCategoryBetweenDates(LocalDateTime startDate, LocalDateTime endDate) {
+        return orderRepository.getRevenueByCategoryBetweenDates(startDate, endDate);
+    }
+
+    @Override
+    public OrderResponse updateOrderStatus(long orderId, String newStatus) {
+        Order o =orderRepository.findById(orderId).orElseThrow(()-> new ResourceNotFoundException("Order","id",orderId));
+        o.setOrderStatus(newStatus);
+        Order rs = orderRepository.save(o);
+        OrderResponse response = new OrderResponse(rs.getId(),rs.getOrderStatus());
+        return response;
     }
 }

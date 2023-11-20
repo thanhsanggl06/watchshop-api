@@ -20,6 +20,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -61,6 +63,12 @@ public class StorageServiceImpl implements StorageService {
             throw new IOException(e.getMessage());
         }
         return response;
+    }
+
+    @Override
+    public List<ImageDataResponse> getAll() {
+        List<ImageDataResponse> responses = imageDataRepository.findAll().stream().map(ImageDataAutoMapper.MAPPER::mapToImageDataResponse).collect(Collectors.toList());
+        return responses;
     }
 
     public boolean isImage(MultipartFile file) {

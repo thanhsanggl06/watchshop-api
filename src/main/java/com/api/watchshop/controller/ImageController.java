@@ -10,10 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/image")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins ={ "http://localhost:4200", "http://localhost:4201"})
 @AllArgsConstructor
 public class ImageController {
     private StorageService storageService;
@@ -26,5 +27,10 @@ public class ImageController {
         ImageDataResponse response = storageService.uploadImage(fileName, file);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<ImageDataResponse>> getAll(){
+        return ResponseEntity.ok(storageService.getAll());
     }
 }

@@ -17,7 +17,8 @@ import java.util.List;
 public class TrackingOrderResponse {
     private long id;
     private Customer customer;
-    private double amount;private String shippingAddress;
+    private double amount;
+    private String shippingAddress;
     private LocalDateTime orderDate;
     private String orderStatus;
     private List<TrackingOrderDetailsResponse> orderDetails;
